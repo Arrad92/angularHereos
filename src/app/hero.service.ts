@@ -6,4 +6,7 @@ export class HeroService{
     getHeroes():Promise<Hero[]>{
         return Promise.resolve(HEROES);
     }
+    getHero(id:number):Promise<Hero>{
+        return this.getHeroes().then(hereos=>hereos.find(hero=>hero.id===id));
+    }
 }
