@@ -8,7 +8,10 @@ import {Router} from '@angular/router';
   template: `<h1>{{title}}</h1>
              <h2>My Hereos</h2>
              <ul class="heroes">
-             <li *ngFor="let hero of hereos" [class.selected]="hero===selectedHero" (click)="onSelect(hero)"><span class="badge">{{hero.id}}</span>{{hero.name}}</li>
+             <label>Hero name: </label><input #heroName/>  <button (click)="create(heroName.value); heroName.value=''">Add</button>
+             <li *ngFor="let hero of hereos" [class.selected]="hero===selectedHero" (click)="onSelect(hero)"><span class="badge">{{hero.id}}</span>{{hero.name}}
+             <button (click)="delete(hero);$event.stopPropagation()">delete</button>
+             </li>
              </ul>
              <div *ngIf="selectedHero">
               <h2>{{selectedHero.name}} details!</h2>
@@ -81,5 +84,18 @@ onSelect(hero:Hero){
 }
 goDetail(){
 this.router.navigate(['/detail', this.selectedHero.id]);
+}
+create(heroName:string):void{
+  if(!heroName) return;
+  this.heroService.add(heroName).then(hero=>{this.hereos.push(hero)
+                                              this.selectedHero=null;
+                                            });
+  
+}
+delete(hero:Hero){
+this.heroService.delete(hero.id)
+                .then(()=>{this.hereos=this.hereos.filter(h=> h!==hero);
+                            if(this.selectedHero===hero) this.selectedHero=null;
+                          })
 }
  }

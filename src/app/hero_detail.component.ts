@@ -14,6 +14,7 @@ template: `<div *ngIf="hero">
                     <input [(ngModel)]="hero.name" placeholder="name"/>
                   </div>
                   <button (click)="goBack()">Go Back</button>
+                  <button (click)="save(hero)">Save</button>
               </div>`
 })
 export class HeroDetailComponent implements OnInit{
@@ -32,5 +33,8 @@ constructor(
 
 goBack(){
     this.location.back();
+}
+save(hero:Hero){
+ this.heroService.update(hero)
 }
 }
